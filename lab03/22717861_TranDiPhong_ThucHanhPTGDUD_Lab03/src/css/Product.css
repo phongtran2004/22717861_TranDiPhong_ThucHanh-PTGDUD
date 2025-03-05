@@ -1,0 +1,13 @@
+.block-product-content {
+    width: 265px;
+}
+
+.time-done-block {
+    width: 80px;
+    background-color: pink;
+}
+
+.time-done {
+    text-align: center;
+    color: rgb(158, 57, 74);
+}

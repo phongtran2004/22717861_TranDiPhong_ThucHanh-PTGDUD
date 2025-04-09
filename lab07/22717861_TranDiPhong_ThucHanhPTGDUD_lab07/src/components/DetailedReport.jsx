@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AddUserModal from './AddUserModal';
 import EditModal from './EditModal';
 import DataTable from './DataTable';
 import editIcon from '../assets/img/edit-icon.png';
@@ -9,6 +10,7 @@ import shareIcon from '../assets/img/share-icon.png';
 const DetailedReport = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentReport, setCurrentReport] = useState(null);
 
@@ -62,17 +64,17 @@ const DetailedReport = () => {
     ];
 
     const handleEditClick = async (report) => {
-        console.log('Clicked report:', report); // Kiểm tra report có id không
+        console.log('Clicked report:', report);
         try {
             const response = await fetch(`http://localhost:5000/users/${report.id}`);
             if (!response.ok) throw new Error('Failed to fetch user');
             const data = await response.json();
-            console.log('Fetched user data:', data); // Kiểm tra dữ liệu từ API
+            console.log('Fetched user data:', data);
             setCurrentReport(data);
             setIsEditModalOpen(true);
         } catch (err) {
             console.error('Error fetching user details:', err);
-            setCurrentReport(report); // Dùng dữ liệu từ row nếu lỗi
+            setCurrentReport(report);
             setIsEditModalOpen(true);
         }
     };
@@ -83,7 +85,7 @@ const DetailedReport = () => {
     };
 
     const handleSaveEdit = (updatedReport) => {
-        console.log('Updated report:', updatedReport); // Kiểm tra dữ liệu cập nhật
+        console.log('Updated report:', updatedReport);
         setUsers((prevUsers) =>
             prevUsers.map((user) =>
                 user.id === updatedReport.id ? updatedReport : user
@@ -92,13 +94,45 @@ const DetailedReport = () => {
         handleEditModalClose();
     };
 
+    const handleAddModalOpen = () => {
+        setIsAddModalOpen(true);
+    };
+
+    const handleAddModalClose = () => {
+        setIsAddModalOpen(false);
+    };
+
+    const handleAddUser = async (newUser) => {
+        try {
+            const response = await fetch('http://localhost:5000/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...newUser,
+                    avatar: '/img/avatar1.png' // Gán avatar mặc định
+                }),
+            });
+
+            if (!response.ok) throw new Error('Failed to add user');
+
+            const addedUser = await response.json();
+            console.log('Added user:', addedUser); // Kiểm tra user mới từ server
+            setUsers((prevUsers) => [...prevUsers, addedUser]);
+            handleAddModalClose();
+        } catch (err) {
+            console.error('Error adding user:', err);
+        }
+    };
+
     useEffect(() => {
         const fetchUsers = async () => {
             try {
                 const response = await fetch('http://localhost:5000/users');
                 if (!response.ok) throw new Error('Failed to fetch users');
                 const data = await response.json();
-                console.log('Initial users data:', data); // Kiểm tra dữ liệu ban đầu
+                console.log('Initial users data:', data);
                 setUsers(data);
                 setLoading(false);
             } catch (err) {
@@ -138,6 +172,12 @@ const DetailedReport = () => {
                         <img src={shareIcon} alt="Share" className="w-4 h-4" />
                         <span>Export</span>
                     </button>
+                    <button
+                        onClick={handleAddModalOpen}
+                        className="border border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600 transition-colors px-4 py-1 rounded-md"
+                    >
+                        Add User
+                    </button>
                 </div>
             </div>
             <DataTable
@@ -151,6 +191,11 @@ const DetailedReport = () => {
                 onClose={handleEditModalClose}
                 report={currentReport}
                 onSave={handleSaveEdit}
+            />
+            <AddUserModal
+                isOpen={isAddModalOpen}
+                onClose={handleAddModalClose}
+                onSave={handleAddUser}
             />
         </div>
     );

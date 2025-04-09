@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import cartIcon from '../assets/img/cart-icon.png';
 import dollarIcon from '../assets/img/dollar-icon.png';
 import userIcon from '../assets/img/user-icon.png';
-import overviewIcon from '../assets/img/overview.png'; 
+import overviewIcon from '../assets/img/overview.png';
 
 const Overview = () => {
   const [overviewData, setOverviewData] = useState({

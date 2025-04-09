@@ -67,6 +67,15 @@
       "date": "10/06/2023",
       "status": "Completed",
       "avatar": "/img/avatar6.png"
+    },
+    {
+      "id": "5957",
+      "name": "Phong Tran",
+      "company": "FPT Software ",
+      "value": "$200000",
+      "date": "04/09/2025",
+      "status": "New",
+      "avatar": "/img/avatar1.png"
     }
   ]
 }

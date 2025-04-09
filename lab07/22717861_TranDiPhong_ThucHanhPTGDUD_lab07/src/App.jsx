@@ -9,6 +9,11 @@ import Messages from './pages/Messages';
 import Integrations from './pages/Integrations';
 import { Route, Routes } from 'react-router-dom';
 
+
+// App component is the main component of the application
+// It contains the sidebar and the main content area
+// The sidebar contains navigation links to different pages
+// The main content area displays the currently selected page based on the URL route
 function App() {
   return (
     <div className="flex h-screen bg-gray-100">

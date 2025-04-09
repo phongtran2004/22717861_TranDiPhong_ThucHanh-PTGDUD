@@ -4,12 +4,6 @@ import editIcon from '../assets/img/edit-icon.png';
 import documentIcon from '../assets/img/document-icon.png';
 import downloadIcon from '../assets/img/download-icon.png';
 import shareIcon from '../assets/img/share-icon.png';
-import avatar1 from '../assets/img/avatar1.png';
-import avatar2 from '../assets/img/avatar2.png';
-import avatar3 from '../assets/img/avatar3.png';
-import avatar4 from '../assets/img/avatar4.png';
-import avatar5 from '../assets/img/avatar5.png';
-import avatar6 from '../assets/img/avatar6.png';
 
 const DetailedReport = () => {
     const [users, setUsers] = useState([]);

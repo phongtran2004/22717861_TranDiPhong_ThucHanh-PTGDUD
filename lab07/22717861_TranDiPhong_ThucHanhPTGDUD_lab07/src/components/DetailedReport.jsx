@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import EditModal from './EditModal';
 import DataTable from './DataTable';
 import editIcon from '../assets/img/edit-icon.png';
 import documentIcon from '../assets/img/document-icon.png';
@@ -8,6 +9,8 @@ import shareIcon from '../assets/img/share-icon.png';
 const DetailedReport = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [currentReport, setCurrentReport] = useState(null);
 
     const columns = [
         {
@@ -49,12 +52,30 @@ const DetailedReport = () => {
             header: '',
             accessor: 'actions',
             render: (row) => (
-                <button >
+                <button onClick={() => handleEditClick(row)}>
                     <img src={editIcon} alt="Edit" />
                 </button>
             )
         },
     ];
+
+    const handleEditClick = (report) => {
+        setCurrentReport(report);
+        setIsEditModalOpen(true);
+    };
+
+    const handleEditModalClose = () => {
+        setIsEditModalOpen(false);
+        setCurrentReport(null);
+    };
+
+    const handleSaveEdit = (updatedReport) => {
+        setReports(prevReports =>
+            prevReports.map(report =>
+                report.name === updatedReport.name ? updatedReport : report
+            )
+        );
+    };
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -108,6 +129,12 @@ const DetailedReport = () => {
                 data={users}
                 showPagination={true}
                 totalResults={users.length}
+            />
+            <EditModal
+                isOpen={isEditModalOpen}
+                onClose={handleEditModalClose}
+                report={currentReport}
+                onSave={handleSaveEdit}
             />
         </div>
     );

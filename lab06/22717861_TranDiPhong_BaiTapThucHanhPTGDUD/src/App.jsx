@@ -20,7 +20,7 @@ function App() {
         {/* Header */}
         <Header />
 
-        {/* Dynamic Routes */}
+        {/* Sử dụng React Router, Chia ra thành các page, gom thành SPA */}
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/projects" element={<Projects />} />

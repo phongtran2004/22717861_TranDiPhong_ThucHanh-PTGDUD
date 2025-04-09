@@ -1,10 +1,10 @@
-// App.js
 import React from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
+import { Route, Routes } from 'react-router-dom';
 
-const App = () => {
+function App() {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
@@ -12,11 +12,16 @@ const App = () => {
 
       {/* Main Content */}
       <div className="flex-1 p-6">
+        {/* Header */}
         <Header />
-        <Dashboard />
+
+        {/* Sử dụng React Router, Chia ra thành các page, gom thành SPA */}
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+        </Routes>
       </div>
     </div>
   );
-};
+}
 
 export default App;

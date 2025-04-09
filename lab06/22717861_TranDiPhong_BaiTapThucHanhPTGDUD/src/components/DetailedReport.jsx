@@ -1,4 +1,4 @@
-// DetailedReport.js
+
 import React, { useState, useEffect } from 'react';
 import DataTable from './DataTable';
 import editIcon from '../assets/img/edit-icon.png';

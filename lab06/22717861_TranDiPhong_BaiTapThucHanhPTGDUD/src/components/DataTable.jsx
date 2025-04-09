@@ -1,19 +1,13 @@
 import React from 'react';
 
 const DataTable = ({ columns, data, showPagination = true, totalResults = 0 }) => {
-    const getStatusStyle = (status) => ({
-        'New': 'bg-blue-100 text-blue-500',
-        'In-progress': 'bg-yellow-100 text-yellow-500',
-        'Completed': 'bg-green-100 text-green-500',
-    }[status] || '');
-
     return (
-        <div className="rounded-lg shadow-md">
+        <div className="rounded-lg shadow-md overflow-x-auto">
             <table className="w-full text-left">
                 <thead>
-                    <tr className="text-gray-500">
+                    <tr className="text-gray-500 bg-gray-50">
                         {columns.map((col, index) => (
-                            <th key={index} className="py-2 px-4">
+                            <th key={index} className="py-2 px-4 font-medium uppercase text-sm">
                                 {col.header}
                             </th>
                         ))}
@@ -21,9 +15,9 @@ const DataTable = ({ columns, data, showPagination = true, totalResults = 0 }) =
                 </thead>
                 <tbody>
                     {data.map((row, rowIndex) => (
-                        <tr key={rowIndex} className="border-t">
+                        <tr key={rowIndex} className="border-t hover:bg-gray-50">
                             {columns.map((col, colIndex) => (
-                                <td key={colIndex} className="py-2 px-4">
+                                <td key={colIndex} className="py-3 px-4">
                                     {col.render
                                         ? col.render(row)
                                         : row[col.accessor]}
@@ -33,14 +27,15 @@ const DataTable = ({ columns, data, showPagination = true, totalResults = 0 }) =
                     ))}
                 </tbody>
             </table>
+
             {showPagination && (
-                <div className="flex justify-between items-center mt-4 px-4 pb-4">
+                <div className="flex justify-between items-center mt-4 px-4 pb-4 text-sm text-gray-600">
                     <span>{totalResults} results</span>
                     <div className="flex space-x-2">
-                        <button className="px-3 py-1 bg-gray-200 rounded-full">◄</button>
+                        <button className="px-3 py-1 bg-gray-200 rounded-full hover:bg-gray-300">◄</button>
                         <button className="px-3 py-1 bg-pink-500 text-white rounded-full">1</button>
-                        <button className="px-3 py-1 bg-gray-200 rounded-full">2</button>
-                        <button className="px-3 py-1 bg-gray-200 rounded-full">►</button>
+                        <button className="px-3 py-1 bg-gray-200 rounded-full hover:bg-gray-300">2</button>
+                        <button className="px-3 py-1 bg-gray-200 rounded-full hover:bg-gray-300">►</button>
                     </div>
                 </div>
             )}

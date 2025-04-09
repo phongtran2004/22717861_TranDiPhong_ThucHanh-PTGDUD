@@ -1,10 +1,20 @@
+// DetailedReport.js
 import React, { useState, useEffect } from 'react';
 import DataTable from './DataTable';
 import editIcon from '../assets/img/edit-icon.png';
+import EditModal from './EditModal';
+import avatar1 from '../assets/img/avatar1.png';
+import avatar2 from '../assets/img/avatar2.png';
+import avatar3 from '../assets/img/avatar3.png';
+import avatar4 from '../assets/img/avatar4.png';
+import avatar5 from '../assets/img/avatar5.png';
+import avatar6 from '../assets/img/avatar6.png';
 
 const DetailedReport = () => {
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentReport, setCurrentReport] = useState(null);
 
     const columns = [
         {
@@ -17,7 +27,11 @@ const DetailedReport = () => {
             accessor: 'name',
             render: (row) => (
                 <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+                    <img
+                        src={row.avatar}
+                        alt={row.name}
+                        className="w-8 h-8 rounded-full object-cover"
+                    />
                     <span>{row.name}</span>
                 </div>
             )
@@ -41,24 +55,45 @@ const DetailedReport = () => {
         {
             header: '',
             accessor: 'actions',
-            render: () => <button><img src={editIcon} alt="Edit" /></button>
+            render: (row) => (
+                <button onClick={() => handleEditClick(row)}>
+                    <img src={editIcon} alt="Edit" />
+                </button>
+            )
         },
     ];
 
+    const handleEditClick = (report) => {
+        setCurrentReport(report);
+        setIsModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+        setCurrentReport(null);
+    };
+
+    const handleSave = (updatedReport) => {
+        setReports(prevReports =>
+            prevReports.map(report =>
+                report.name === updatedReport.name ? updatedReport : report
+            )
+        );
+    };
+
     useEffect(() => {
-        // Fake API call
         const fetchReports = () => {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     resolve([
-                        { name: 'Elizabeth Lee', company: 'AvatarSystems', value: '$559', date: '10/07/2023', status: 'New' },
-                        { name: 'Carlos Garcia', company: 'SnoozeShift', value: '$747', date: '24/07/2023', status: 'New' },
-                        { name: 'Elizabeth Bailey', company: 'Prime Time Telecom', value: '$564', date: '08/08/2023', status: 'In-progress' },
-                        { name: 'Ryan Brown', company: 'OmniTech Corporation', value: '$541', date: '31/08/2023', status: 'In-progress' },
-                        { name: 'Ryan Young', company: 'DataStream Inc.', value: '$769', date: '01/05/2023', status: 'Completed' },
-                        { name: 'Hailey Adams', company: 'FlowRush', value: '$922', date: '10/06/2023', status: 'Completed' },
+                        { name: 'Elizabeth Lee', company: 'AvatarSystems', value: '$559', date: '10/07/2023', status: 'New', avatar: avatar1 },
+                        { name: 'Carlos Garcia', company: 'SnoozeShift', value: '$747', date: '24/07/2023', status: 'New', avatar: avatar2 },
+                        { name: 'Elizabeth Bailey', company: 'Prime Time Telecom', value: '$564', date: '08/08/2023', status: 'In-progress', avatar: avatar3 },
+                        { name: 'Ryan Brown', company: 'OmniTech Corporation', value: '$541', date: '31/08/2023', status: 'In-progress', avatar: avatar4 },
+                        { name: 'Ryan Young', company: 'DataStream Inc.', value: '$769', date: '01/05/2023', status: 'Completed', avatar: avatar5 },
+                        { name: 'Hailey Adams', company: 'FlowRush', value: '$922', date: '10/06/2023', status: 'Completed', avatar: avatar6 },
                     ]);
-                }, 1000); // Giả lập độ trễ mạng 1 giây
+                }, 1000);
             });
         };
 
@@ -90,7 +125,13 @@ const DetailedReport = () => {
                 columns={columns}
                 data={reports}
                 showPagination={true}
-                totalResults={63}
+                totalResults={reports.length}
+            />
+            <EditModal
+                isOpen={isModalOpen}
+                onClose={handleModalClose}
+                report={currentReport}
+                onSave={handleSave}
             />
         </div>
     );

@@ -12,11 +12,8 @@ import avatar5 from '../assets/img/avatar5.png';
 import avatar6 from '../assets/img/avatar6.png';
 
 const DetailedReport = () => {
-    const [reports, setReports] = useState([]);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [currentReport, setCurrentReport] = useState(null);
 
     const columns = [
         {
@@ -58,16 +55,37 @@ const DetailedReport = () => {
             header: '',
             accessor: 'actions',
             render: (row) => (
-                <button onClick={() => handleEditClick(row)}>
+                <button >
                     <img src={editIcon} alt="Edit" />
                 </button>
             )
         },
     ];
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                // Gọi API để lấy dữ liệu
+                const response = await fetch('http://localhost:5000/users'); // API URL của bạn
+                const data = await response.json();
+                setUsers(data);
+                setLoading(false);
+            } catch (err) {
+                console.error('Error fetching users:', err);
+                setLoading(false);
+            }
+        };
+
+        fetchUsers();
+    }, []); // Chạy chỉ khi component mount
+
+    if (loading) {
+        return <div className="p-6">Loading...</div>;
+    }
+
     return (
         <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="flex justify-between items-center mb-4">
-                {/* Tiêu đề với icon document */}
                 <div className="flex items-center">
                     <img
                         src={documentIcon}
@@ -77,14 +95,12 @@ const DetailedReport = () => {
                     <h2 className="text-lg font-semibold">DETAILED REPORT</h2>
                 </div>
                 <div className="flex items-center space-x-2 flex-nowrap">
-                    {/* Button Import với downloadIcon */}
                     <button
                         className="border border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600 transition-colors px-4 py-1 rounded-md flex items-center space-x-1"
                     >
                         <img src={downloadIcon} alt="Download" className="w-4 h-4" />
                         <span>Import</span>
                     </button>
-                    {/* Button Export với shareIcon */}
                     <button
                         className="border border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600 transition-colors px-4 py-1 rounded-md flex items-center space-x-1"
                     >
@@ -95,9 +111,9 @@ const DetailedReport = () => {
             </div>
             <DataTable
                 columns={columns}
-                data={reports}
+                data={users}
                 showPagination={true}
-                totalResults={reports.length}
+                totalResults={users.length}
             />
         </div>
     );

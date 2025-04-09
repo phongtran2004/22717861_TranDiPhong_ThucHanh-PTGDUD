@@ -24,7 +24,7 @@ const DetailedReport = () => {
             render: (row) => (
                 <div className="flex items-center space-x-2">
                     <img
-                        src={row.avatar}
+                        src={`http://localhost:5000${row.avatar}`}
                         alt={row.name}
                         className="w-8 h-8 rounded-full object-cover"
                     />
@@ -39,11 +39,13 @@ const DetailedReport = () => {
             header: 'STATUS',
             accessor: 'status',
             render: (row) => (
-                <span className={`px-3 py-1 rounded-full text-sm ${{
-                    'New': 'bg-blue-100 text-blue-500',
-                    'In-progress': 'bg-yellow-100 text-yellow-500',
-                    'Completed': 'bg-green-100 text-green-500',
-                }[row.status]}`}>
+                <span
+                    className={`px-3 py-1 rounded-full text-sm ${{
+                        'New': 'bg-blue-100 text-blue-500',
+                        'In-progress': 'bg-yellow-100 text-yellow-500',
+                        'Completed': 'bg-green-100 text-green-500',
+                    }[row.status]}`}
+                >
                     {row.status}
                 </span>
             )
@@ -59,9 +61,20 @@ const DetailedReport = () => {
         },
     ];
 
-    const handleEditClick = (report) => {
-        setCurrentReport(report);
-        setIsEditModalOpen(true);
+    const handleEditClick = async (report) => {
+        console.log('Clicked report:', report); // Kiểm tra report có id không
+        try {
+            const response = await fetch(`http://localhost:5000/users/${report.id}`);
+            if (!response.ok) throw new Error('Failed to fetch user');
+            const data = await response.json();
+            console.log('Fetched user data:', data); // Kiểm tra dữ liệu từ API
+            setCurrentReport(data);
+            setIsEditModalOpen(true);
+        } catch (err) {
+            console.error('Error fetching user details:', err);
+            setCurrentReport(report); // Dùng dữ liệu từ row nếu lỗi
+            setIsEditModalOpen(true);
+        }
     };
 
     const handleEditModalClose = () => {
@@ -70,19 +83,22 @@ const DetailedReport = () => {
     };
 
     const handleSaveEdit = (updatedReport) => {
-        setReports(prevReports =>
-            prevReports.map(report =>
-                report.name === updatedReport.name ? updatedReport : report
+        console.log('Updated report:', updatedReport); // Kiểm tra dữ liệu cập nhật
+        setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+                user.id === updatedReport.id ? updatedReport : user
             )
         );
+        handleEditModalClose();
     };
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                // Gọi API để lấy dữ liệu
-                const response = await fetch('http://localhost:5000/users'); // API URL của bạn
+                const response = await fetch('http://localhost:5000/users');
+                if (!response.ok) throw new Error('Failed to fetch users');
                 const data = await response.json();
+                console.log('Initial users data:', data); // Kiểm tra dữ liệu ban đầu
                 setUsers(data);
                 setLoading(false);
             } catch (err) {
@@ -92,7 +108,7 @@ const DetailedReport = () => {
         };
 
         fetchUsers();
-    }, []); // Chạy chỉ khi component mount
+    }, []);
 
     if (loading) {
         return <div className="p-6">Loading...</div>;

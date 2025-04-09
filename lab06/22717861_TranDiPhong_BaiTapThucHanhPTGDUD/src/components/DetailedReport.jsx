@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import DataTable from './DataTable';
-import editIcon from '../assets/img/edit-icon.png';
 import EditModal from './EditModal';
+import AddUserModal from './AddUserModal'; // Thêm modal mới
+import editIcon from '../assets/img/edit-icon.png';
 import avatar1 from '../assets/img/avatar1.png';
 import avatar2 from '../assets/img/avatar2.png';
 import avatar3 from '../assets/img/avatar3.png';
@@ -13,7 +13,8 @@ import avatar6 from '../assets/img/avatar6.png';
 const DetailedReport = () => {
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false); // State cho modal thêm user
     const [currentReport, setCurrentReport] = useState(null);
 
     const columns = [
@@ -65,20 +66,35 @@ const DetailedReport = () => {
 
     const handleEditClick = (report) => {
         setCurrentReport(report);
-        setIsModalOpen(true);
+        setIsEditModalOpen(true);
     };
 
-    const handleModalClose = () => {
-        setIsModalOpen(false);
+    const handleEditModalClose = () => {
+        setIsEditModalOpen(false);
         setCurrentReport(null);
     };
 
-    const handleSave = (updatedReport) => {
+    const handleAddModalOpen = () => {
+        setIsAddModalOpen(true);
+    };
+
+    const handleAddModalClose = () => {
+        setIsAddModalOpen(false);
+    };
+
+    const handleSaveEdit = (updatedReport) => {
         setReports(prevReports =>
             prevReports.map(report =>
                 report.name === updatedReport.name ? updatedReport : report
             )
         );
+    };
+
+    const handleAddUser = (newUser) => {
+        setReports(prevReports => [
+            ...prevReports,
+            { ...newUser, avatar: avatar1 } // Gán avatar mặc định cho user mới
+        ]);
     };
 
     useEffect(() => {
@@ -117,8 +133,22 @@ const DetailedReport = () => {
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">DETAILED REPORT</h2>
                 <div className="space-x-2">
-                    <button className="text-pink-500">Import</button>
-                    <button className="text-pink-500">Export</button>
+                    <button
+                        className="border border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600 transition-colors px-4 py-1 rounded-md"
+                    >
+                        Import
+                    </button>
+                    <button
+                        className="border border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600 transition-colors px-4 py-1 rounded-md"
+                    >
+                        Export
+                    </button>
+                    <button
+                        onClick={handleAddModalOpen}
+                        className="border border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600 transition-colors px-4 py-1 rounded-md"
+                    >
+                        Add User
+                    </button>
                 </div>
             </div>
             <DataTable
@@ -128,10 +158,15 @@ const DetailedReport = () => {
                 totalResults={reports.length}
             />
             <EditModal
-                isOpen={isModalOpen}
-                onClose={handleModalClose}
+                isOpen={isEditModalOpen}
+                onClose={handleEditModalClose}
                 report={currentReport}
-                onSave={handleSave}
+                onSave={handleSaveEdit}
+            />
+            <AddUserModal
+                isOpen={isAddModalOpen}
+                onClose={handleAddModalClose}
+                onSave={handleAddUser}
             />
         </div>
     );

@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom"
-import { Sun, Moon, LogIn } from "lucide-react"
+import { Link, NavLink } from "react-router-dom";
+import { Sun, Moon, LogIn } from "lucide-react";
 
 const Header = () => {
     return (
@@ -8,31 +8,46 @@ const Header = () => {
                 <div className="flex items-center justify-between h-16">
                     {/* Logo and brand */}
                     <div className="flex-shrink-0 font-bold text-xl text-purple-600 dark:text-purple-400">
-                        <Link to="/" className="hover:text-purple-700 dark:hover:text-purple-300 transition-colors">
+                        <Link
+                            to="/"
+                            className="hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
+                        >
                             MyApp
                         </Link>
                     </div>
 
                     {/* Navigation links */}
                     <nav className="hidden md:flex items-center space-x-8">
-                        <Link
+                        <NavLink
                             to="/counter-app"
-                            className="text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                            className={({ isActive }) =>
+                                isActive
+                                    ? "text-purple-600 dark:text-purple-400 px-3 py-2 rounded-md text-sm font-medium"
+                                    : "text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                            }
                         >
                             CounterApp
-                        </Link>
-                        <Link
+                        </NavLink>
+                        <NavLink
                             to="/todolist"
-                            className="text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                            className={({ isActive }) =>
+                                isActive
+                                    ? "text-purple-600 dark:text-purple-400 px-3 py-2 rounded-md text-sm font-medium"
+                                    : "text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                            }
                         >
                             TodoList
-                        </Link>
-                        <Link
+                        </NavLink>
+                        <NavLink
                             to="/shopping-cart"
-                            className="text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                            className={({ isActive }) =>
+                                isActive
+                                    ? "text-purple-600 dark:text-purple-400 px-3 py-2 rounded-md text-sm font-medium"
+                                    : "text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                            }
                         >
                             ShoppingCart
-                        </Link>
+                        </NavLink>
                     </nav>
 
                     {/* Action buttons */}
@@ -76,14 +91,19 @@ const Header = () => {
                                 stroke="currentColor"
                                 aria-hidden="true"
                             >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M4 6h16M4 12h16M4 18h16"
+                                />
                             </svg>
                         </button>
                     </div>
                 </div>
             </div>
         </header>
-    )
-}
+    );
+};
 
-export default Header
+export default Header;

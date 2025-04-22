@@ -1,0 +1,22 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "name": "Laptop",
+            "price": 999.99,
+            "image": "/assets/img/laptop.jpg"
+        },
+        {
+            "id": 2,
+            "name": "Headphones",
+            "price": 99.99,
+            "image": "/assets/img/headphones.jpg"
+        },
+        {
+            "id": 3,
+            "name": "Smartphone",
+            "price": 699.99,
+            "image": "/assets/img/smartphone.jpg"
+        }
+    ]
+}

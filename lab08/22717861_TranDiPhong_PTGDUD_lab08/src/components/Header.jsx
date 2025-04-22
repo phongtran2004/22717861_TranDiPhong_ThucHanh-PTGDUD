@@ -39,14 +39,14 @@ const Header = () => {
                             TodoList
                         </NavLink>
                         <NavLink
-                            to="/shopping-cart"
+                            to="/products"
                             className={({ isActive }) =>
                                 isActive
                                     ? "text-purple-600 dark:text-purple-400 px-3 py-2 rounded-md text-sm font-medium"
                                     : "text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                             }
                         >
-                            ShoppingCart
+                            Products
                         </NavLink>
                     </nav>
 
